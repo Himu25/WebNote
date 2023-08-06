@@ -14,9 +14,6 @@ professional notes securely from any device.
 
 - MongoDB
 
-- CSS
-
-
 ## Screenshots
 Login Page
 
