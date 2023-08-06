@@ -4,9 +4,6 @@
 WebNote is a full stack web application built using MERN stack which allows users to create, store, and access personal and
 professional notes securely from any device.
 
-
-## Roadmap
-
 - React
 
 - Bootstrap
