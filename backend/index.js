@@ -14,6 +14,6 @@ const NotesRoute = require('./routes/notes');
 app.use('/api/auth',NotesRoute)
 
 require('./db')
-app.listen(port, function () {
+app.listen(port, function (){
     console.log(`Server is running at port no ${port}`);
 })

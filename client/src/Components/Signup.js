@@ -1,14 +1,20 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const Signup = ({setIsLoggedIn}) => {
+const Signup = () => {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
-    const host = 'http://localhost:5000'
+    const host = 'https://webnote.onrender.com'
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    useEffect(()=>{
+        let isAuth = localStorage.getItem('isAuth')
+        if (isAuth) {
+            navigate('/')
+        }
+    })
 
     async function signup(e) {
         setLoading(true)
@@ -23,7 +29,7 @@ const Signup = ({setIsLoggedIn}) => {
         const json = await response.json();
         if (json.success) {
             localStorage.setItem('token', json.token)
-            setIsLoggedIn(true)
+            localStorage.setItem('isAuth', true)
             setLoading(false)
             navigate('/')
             toast.success('Successfully registered')
@@ -36,6 +42,7 @@ const Signup = ({setIsLoggedIn}) => {
 
     return (
         <>
+        <div className='min-vh-100'>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <div className="container mt-4 my-5 mx-5 border border-4 rounded-4" style={{ width: '600px' }}>
                     <h3 className='text-center mt-3 fw-bold'>Sign Up</h3>
@@ -52,13 +59,14 @@ const Signup = ({setIsLoggedIn}) => {
                             <label htmlFor="inputPassword" className="form-label">Password</label>
                             <input type="password" value={password} onChange={(e) => { setPassword(e.target.value) }} className="form-control" id="inputPassword" />
                         </div>
-                        {loading && <button type="submit" disabled className="btn btn-primary">Signup <i className="fa fa-spinner fa-spin fs-6 ms-1"></i></button>}
-                        {!loading && <button type="submit" className="btn btn-primary">Signup</button>}
+                        {loading && <button type="submit" disabled className="btn text-white" style={{background: '#f5ba13'}}>Signup <i className="fa fa-spinner fa-spin fs-6 ms-1"></i></button>}
+                        {!loading && <button type="submit" className="btn text-white" style={{background: '#f5ba13'}}>Signup</button>}
                     </form>
                     <p className="text-center" style={{ fontSize: '14px', color: '#555', marginTop: '15px' }}>
-                        Already have an account? <Link to="/login" style={{ color: '#007bff', textDecoration: 'none' }}>Login</Link>
+                        Already have an account? <Link to="/login" style={{ color: '#f5ba13', textDecoration: 'none' }}>Login</Link>
                     </p>
                 </div>
+            </div>
             </div>
         </>
     )

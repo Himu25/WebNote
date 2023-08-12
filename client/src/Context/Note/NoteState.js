@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import NoteContext from './NoteContext'
-import { toast } from 'react-toastify'
 
 const NoteState = (props) => {
-    const host = 'http://localhost:5000'
+    const host = 'https://webnote.onrender.com'
     const [notes, setNotes] = useState([])
 
     // Fetch Notes
@@ -17,11 +16,7 @@ const NoteState = (props) => {
             },
         });
         const json = await response.json();
-        if (json.success) {
-            setNotes(json.notes);
-        } else {
-            toast.error('Error fetching notes');
-        }
+        setNotes(json.notes);
     }
 
 
@@ -34,9 +29,16 @@ const NoteState = (props) => {
             },
             body: JSON.stringify({ title, description, tag }),
         });
+    
         const json = await response.json();
-        return json
+    
+        if (response.ok) {
+            return json; // Resolve the promise with the JSON response
+        } else {
+            throw new Error(json.errors); // Reject the promise with the error message
+        }
     }
+    
 
 
 
@@ -75,9 +77,8 @@ const NoteState = (props) => {
             }
         }
         setNotes(newNotes);
-        toast.success('Note Updated Successfully')
     }else{
-        toast.error(json.errors)
+        console.log(json.errors);
     }
     }
     return (

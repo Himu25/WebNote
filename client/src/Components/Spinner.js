@@ -2,10 +2,8 @@ import React from 'react'
 const Spinner = () => {
     return (
         <>
-            <div className="con" style={{ textAlign: 'center' }}>
-                <div className="spinner-border mt-5" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                </div>
+            <div className="spinner-border text-warning mt-5" role="status">
+                <span className="visually-hidden">Loading...</span>
             </div>
         </>
     )

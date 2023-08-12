@@ -1,40 +1,103 @@
-import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const Navbar = ({setIsLoggedIn}) => {
-    const navigate = useNavigate()
-    const handleLogout = ()=>{
-        localStorage.removeItem('token')
-        setIsLoggedIn(false)
-        toast.error('Logged out')
-        navigate('/login')
-    }
-    return (
-        <>
-            <nav className="navbar navbar-expand-lg bg-body-tertiary" id='Nav'>
-                <div className="container-fluid">
-                    <Link className="navbar-brand" to="/">WebNote</Link>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul className="navbar-nav me-auto mb-2 mb-lg-0" id="list">
-                            <li className="nav-item">
-                                <NavLink className="nav-link" aria-current="page" to="/">Your Notes</NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink className="nav-link" aria-current="page" to="/addNote">AddNote</NavLink>
-                            </li>
-                        </ul>
-                        <form className="d-flex">
-                            {!localStorage.getItem('token') && <NavLink className="btn btn-primary mx-1" to="/login" role="button">Login</NavLink>}
-                            {localStorage.getItem('token') && <button type="button" onClick={handleLogout} className="btn btn-primary">Logout</button>}
-                        </form>
-                    </div>
-                </div>
-            </nav>
-        </>
-    )
-}
+const Navbar = () => {
+    const navigate = useNavigate();
+    const [user, setUser] = useState({ name: '', email: '' });
+    const host = 'https://webnote.onrender.com';
 
-export default Navbar
+    async function fetchUser() {
+        const response = await fetch(`${host}/api/auth/fetchUser`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': localStorage.getItem('token')
+            },
+        });
+        const json = await response.json();
+        setUser(json.user);
+    }
+
+    useEffect(() => {
+        if (localStorage.getItem('isAuth')) {
+            fetchUser();
+        }
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('isAuth');
+        toast.error('Logged out');
+        navigate('/login');
+    };
+
+    return (
+        <nav className="navbar navbar-expand-lg" style={{ backgroundColor: '#f5ba13' }} id="Nav">
+            <div className="container-fluid">
+                <Link
+                    className="navbar-brand"
+                    to="/"
+                    style={{ fontSize: '24px', color: 'white', fontFamily: 'McLaren, cursive' }}
+                >
+                    WebNote
+                </Link>
+                <div className="d-flex align-items-center">
+                    {localStorage.getItem('isAuth') && (
+                        <div className="dropdown">
+                            <button
+                                className="btn mx-1 profile-button"
+                                type="button"
+                                id="profileDropdown"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                                <div
+                                    style={{
+                                        backgroundColor: '#f5ba13',
+                                        borderRadius: '50%',
+                                        width: '32px',
+                                        height: '32px',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        border: '2px solid white'
+                                    }}
+                                >
+                                    <i className="fa fa-user text-white" aria-hidden="true"></i>
+                                </div>
+                            </button>
+                            <div
+                                className="dropdown-menu dropdown-menu-end"
+                                aria-labelledby="profileDropdown"
+                                style={{ minWidth: '200px', boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)' }}
+                            >
+                                <div className="dropdown-item" style={{ marginBottom: '4px' }}>
+                                    <p style={{ marginBottom: '4px' }}>Name: {user.name}</p>
+                                    <p style={{ marginBottom: '0' }}>Email: {user.email}</p>
+                                </div>
+                                <hr className="dropdown-divider" />
+                                <button
+                                    type="button"
+                                    onClick={handleLogout}
+                                    className="dropdown-item"
+                                    style={{
+                                        backgroundColor: 'grey',
+                                        color: 'white',
+                                        transition: 'background-color 0.3s',
+                                    }}
+                                    onMouseEnter={(e) => (e.target.style.backgroundColor = '#f5ba13')}
+                                    onMouseLeave={(e) => (e.target.style.backgroundColor = 'grey')}
+                                >
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </nav>
+    );
+};
+
+export default Navbar;
