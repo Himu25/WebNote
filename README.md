@@ -13,24 +13,7 @@ professional notes securely from any device.
 - Express
 
 - MongoDB
-
-## Screenshots
-Login Page
-
-![App Screenshot](https://github.com/Himu25/WebNote/blob/main/Screenshots/Screenshot%202023-08-06%20152631.png)
-
-All Notes
-
-![App Screenshot](https://github.com/Himu25/WebNote/blob/main/Screenshots/Screenshot%202023-08-06%20152732.png)
-
-New Note
-
-![App Screenshot](https://github.com/Himu25/WebNote/blob/main/Screenshots/Screenshot%202023-08-06%20152759.png)
-
-Notes
-
-![App Screenshot](https://github.com/Himu25/WebNote/blob/main/Screenshots/Screenshot%202023-08-06%20152850.png)
-
+- 
 # Getting Started with Create React App
 
 ## Available Scripts
